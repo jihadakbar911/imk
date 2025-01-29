@@ -27,6 +27,14 @@ def home():
     products = db.execute('SELECT * FROM products').fetchall()
     return render_template('index.html', products=products)
 
+@app.route('/admin')
+def admin_page():
+    conn = sqlite3.connect('/app/database.db')  # Sesuaikan lokasi database
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM orders")  # Ambil semua data di tabel orders
+    orders = cursor.fetchall()
+    conn.close()
+
 @app.route('/cart')
 def cart():
     return render_template('cart.html')

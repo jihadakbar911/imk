@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Orders</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h2>Data Checkout</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>User ID</th>
+            <th>Server ID</th>
+            <th>Nickname</th>
+            <th>Email</th>
+            <th>WhatsApp</th>
+            <th>Produk</th>
+            <th>Jumlah Produk</th>
+            <th>Total Harga</th>
+            <th>Waktu Checkout</th>
+        </tr>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order[0] }}</td>
+            <td>{{ order[1] }}</td>
+            <td>{{ order[2] }}</td>
+            <td>{{ order[3] }}</td>
+            <td>{{ order[4] }}</td>
+            <td>{{ order[5] }}</td>
+            <td>{{ order[6] }}</td>
+            <td>{{ order[7] }}</td>
+            <td>{{ order[8] }}</td>
+            <td>{{ order[9] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
