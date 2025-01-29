@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Mercusuar Store</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">  
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="../static/lib/animate/animate.min.css" rel="stylesheet">
+    <link href="../static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="../static/css/style.css" rel="stylesheet">
+
+    <script>
+        // Function to add product to cart
+        function addToCart(productId, productName, price) {
+            // Get cart data from localStorage or initialize empty array
+            let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        
+            // Check if product already exists in cart
+            let existingItem = cartItems.find(item => item.name === productName);
+        
+            if (existingItem) {
+                // If product exists, increment quantity
+                existingItem.quantity += 1;
+                existingItem.total = existingItem.price * existingItem.quantity;
+            } else {
+                // If new product, add to cart
+                cartItems.push({
+                    id: productId,
+                    name: productName,
+                    price: price,
+                    quantity: 1,
+                    total: price,
+                    image: '../static/img/diamond.png'
+                });
+            }
+        
+            // Save cart data back to localStorage
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+        
+            // Show success notification
+            alert(`${productName} berhasil ditambahkan ke keranjang!`);
+        
+            // Update cart count in navbar
+            updateCartCount();
+
+            // Redirect to cart page
+            window.location.href = '/cart';
+        }
+
+        // Function to update cart count in navbar
+        function updateCartCount() {
+            let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            let totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+            document.querySelector('.cart-count').textContent = totalItems;
+        }
+
+        // Initialize cart count on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+        });
+
+        function filterProducts(priceRange) {
+            // Get all product items
+            const products = document.querySelectorAll('.product-item');
+            
+            products.forEach(product => {
+                // Get price text and convert to number
+                const priceText = product.querySelector('h5').textContent;
+                const price = parseInt(priceText.replace(/[^0-9]/g, ''));
+                
+                // Show/hide based on price range
+                if (priceRange === 'all') {
+                    product.parentElement.style.display = 'block';
+                } else {
+                    const [min, max] = priceRange.split('-').map(Number);
+                    if (price >= min && price <= max) {
+                        product.parentElement.style.display = 'block';
+                    } else {
+                        product.parentElement.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        // Add event listeners to checkboxes
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.price-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    // Uncheck other checkboxes
+                    checkboxes.forEach(cb => {
+                        if (cb !== checkbox) cb.checked = false;
+                    });
+                    
+                    // Filter products
+                    if (checkbox.checked) {
+                        filterProducts(checkbox.getAttribute('data-range'));
+                    } else {
+                        filterProducts('all');
+                    }
+                });
+            });
+
+            // Add sorting functionality
+            const sortingButtons = document.querySelectorAll('.sorting-option');
+            sortingButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sortType = this.getAttribute('data-sort');
+                    const products = document.querySelectorAll('.product-item');
+                    
+                    products.forEach(product => {
+                        const price = parseInt(product.querySelector('h5').textContent.replace(/[^0-9]/g, ''));
+                        
+                        if (sortType === 'latest') {
+                            // Show only most expensive
+                            product.parentElement.style.display = price >= 2000000 ? 'block' : 'none';
+                        } else if (sortType === 'popularity') {
+                            // Show products between 0-500000
+                            product.parentElement.style.display = price <= 500000 ? 'block' : 'none';
+                        } else if (sortType === 'rating') {
+                            // Show only 8000 price products
+                            product.parentElement.style.display = price === 8000 ? 'block' : 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <!-- Topbar Start -->
+<div class="container-fluid">
+    <div class="row bg-secondary py-1 px-xl-5">
+        <div class="col-lg-6 d-none d-lg-block">
+            <div class="d-inline-flex align-items-center h-100">
+                <a href="">
+                    <img src="../static/img/logo.png"  class="topbar-img">
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Topbar Start 
+    <div class="container-fluid">
+        <div class="row bg-secondary py-1 px-xl-5">
+            <div class="col-lg-6 d-none d-lg-block">
+                <div class="d-inline-flex align-items-center h-100">
+                    <a class="text-body mr-3" href="">About</a>
+                    <a class="text-body mr-3" href="">Contact</a>
+                    <a class="text-body mr-3" href="">Help</a>
+                    <a class="text-body mr-3" href="">FAQs</a>
+                </div> 
+            </div>
+            <div class="col-lg-6 text-center text-lg-right">
+                <div class="d-inline-flex align-items-center">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <button class="dropdown-item" type="button">Sign in</button>
+                            <button class="dropdown-item" type="button">Sign up</button>
+                        </div>
+                    </div>
+                    <div class="btn-group mx-2">
+                        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">USD</button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <button class="dropdown-item" type="button">EUR</button>
+                            <button class="dropdown-item" type="button">GBP</button>
+                            <button class="dropdown-item" type="button">CAD</button>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">EN</button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <button class="dropdown-item" type="button">FR</button>
+                            <button class="dropdown-item" type="button">AR</button>
+                            <button class="dropdown-item" type="button">RU</button>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="d-inline-flex align-items-center d-block d-lg-none">
+                    <a href="" class="btn px-0 ml-2">
+                        <i class="fas fa-heart text-dark"></i>
+                        <span class="badge text-dark border border-blue rounded-circle" style="padding-bottom: 2px;">0</span>
+                    </a>
+                    <a href="" class="btn px-0 ml-2">
+                        <i class="fas fa-shopping-cart text-blue"></i>
+                        <span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
+            <div class="col-lg-4">
+                <a href="" class="text-decoration-none">
+                    <span class="h1 text-uppercase text-primary bg-blue px-2">Mercusuar</span>
+                    <span class="h1 text-uppercase text-blue bg-primary px-2 ml-n1">Store</span>
+                </a>
+            </div>
+            <div class="col-lg-4 col-6 text-left">
+                <form action="">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search for products">
+                        <div class="input-group-append">
+                            <span class="input-group-text bg-transparent text-primary">
+                                <i class="fa fa-search"></i>
+                            </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-4 col-6 text-right">
+                <p class="m-0">Customer Service</p>
+                <h5 class="m-0">+62 813 2415 7132</h5>
+            </div>
+        </div>
+    </div>
+    <!-- Topbar End -->
+
+
+    <!-- Navbar Start -->
+    <div class="container-fluid bg-dark mb-30">
+        <div class="row px-xl-5">
+            <div class="col-lg-3 d-none d-lg-block">
+                <a class="btn d-flex align-items-center justify-content-between bg-primary w-100" data-toggle="collapse" href="#navbar-vertical" style="height: 65px; padding: 0 30px;">
+                    <h6 class="text-blue m-0"><i class="fa fa-bars mr-2"></i>Categories</h6>
+                    <i class="fa fa-angle-down text-blue"></i>
+                </a>
+                <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 999;">
+                    <div class="navbar-nav w-100">
+                        <div class="nav-item dropdown dropright">
+                            
+                            <div class="dropdown-menu position-absolute rounded-0 border-0 m-0">
+                                <a href="" class="dropdown-item">Diamonds</a>
+                                <a href="" class="dropdown-item">Weekly</a>
+                                <a href="" class="dropdown-item">Baby's Dresses</a>
+                            </div>
+                        </div>
+                        <a href="/shop" class="nav-item nav-link">Diamonds</a>
+                        <a href="/wdp" class="nav-item nav-link">Weekly Diamonds Pass</a>
+                        <a href="/sl" class="nav-item nav-link">Starlight Card</a>
+                        
+
+                    </div>
+                </nav>
+            </div>
+            <div class="col-lg-9">
+                <nav class="navbar navbar-expand-lg bg-blue navbar-dark py-3 py-lg-0 px-0">
+                    <a href="" class="text-decoration-none d-block d-lg-none">
+                        <span class="h1 text-uppercase text-dark bg-light px-2">Mercusuar</span>
+                        <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Store</span>
+                    </a>
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                        <div class="navbar-nav mr-auto py-0">
+                            <a href="/" class="nav-item nav-link active">Home</a>
+                            <a href="/checkout" class="nav-item nav-link">Checkout</a>
+                            <a href="/cart" class="nav-item nav-link">Cart</a>
+                            <div class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"> Shop <i class="fa fa-angle-down mt-1"></i></a>
+                                <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
+                                    <a href="/shop" class="dropdown-item">Diamonds</a>
+                                    <a href="/wdp" class="dropdown-item">Weekly Diamonds Pass</a>
+                                    <a href="/sl" class="dropdown-item">Starlight Card</a>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
+                            <a href="" class="btn px-0">
+                                <i class="fas fa-heart text-yellow"></i>
+                                <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
+                            </a>
+                            <a href="" class="btn px-0 ml-3">
+                                <i class="fas fa-shopping-cart text-yellow"></i>
+                                <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Navbar End -->
+
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-blue" href="#">Home</a>
+                    <a class="breadcrumb-item text-blue" href="#">Shop</a>
+                    <span class="breadcrumb-item active">Shop List</span>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+    <!-- Shop Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <!-- Shop Sidebar Start -->
+            <div class="col-lg-3 col-md-4">
+                <!-- Price Start -->
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by price</span></h5>
+                <div class="bg-light p-4 mb-30">
+                    <form>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" class="custom-control-input price-checkbox" checked id="price-all" data-range="all">
+                            <label class="custom-control-label" for="price-all">All Price</label>
+                            <span class="badge border font-weight-normal">12</span>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" class="custom-control-input price-checkbox" id="price-1" data-range="0-100000">
+                            <label class="custom-control-label" for="price-1">IDR 0 - IDR 100.000</label>
+                            <span class="badge border font-weight-normal">2</span>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" class="custom-control-input price-checkbox" id="price-2" data-range="100000-500000">
+                            <label class="custom-control-label" for="price-2">IDR 100.000 - IDR 500.000</label>
+                            <span class="badge border font-weight-normal">2</span>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" class="custom-control-input price-checkbox" id="price-3" data-range="500000-1000000">
+                            <label class="custom-control-label" for="price-3">IDR 500.000 - IDR 1.000.000</label>
+                            <span class="badge border font-weight-normal">1</span>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" class="custom-control-input price-checkbox" id="price-4" data-range="1000000-2000000">
+                            <label class="custom-control-label" for="price-4">IDR 1.000.000 - IDR 2.000.000</label>
+                            <span class="badge border font-weight-normal">3</span>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
+                            <input type="checkbox" class="custom-control-input price-checkbox" id="price-5" data-range="2000000-3000000">
+                            <label class="custom-control-label" for="price-5">IDR 2.000.000 - IDR 3.000.000</label>
+                            <span class="badge border font-weight-normal">4</span>
+                        </div>
+                    </form>
+                </div>
+                <!-- Price End -->
+            </div>
+            <!-- Shop Sidebar End -->
+
+            <!-- Shop Product Start -->
+            <div class="col-lg-9 col-md-8">
+                <div class="row pb-3">
+                    <div class="col-12 pb-1">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <div>
+                            </div>
+                            <div class="ml-2">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Sorting</button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item sorting-option" href="#" data-sort="latest">Latest</a>
+                                        <a class="dropdown-item sorting-option" href="#" data-sort="popularity">Popularity</a>
+                                        <a class="dropdown-item sorting-option" href="#" data-sort="rating">Best Rating</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product Items -->
+                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                        <div class="product-item bg-light mb-4">
+                            <div class="product-img position-relative overflow-hidden">
+                                <img class="img-fluid w-100" src="../static/img/diamond.png" alt="">
+                                <div class="product-action">
+                                    <a class="btn btn-outline-dark btn-square" href="/cart" onclick="addToCart('28dm', '28 Diamond', 8000)">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="text-center py-4">
+                                <a class="h6 text-decoration-none text-truncate" href="">28 Diamond</a>
+                                <div class="d-flex align-items-center justify-content-center mt-2">
+                                    <h5>IDR 8.000</h5>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-center mb-1">
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                        <div class="product-item bg-light mb-4">
+                            <div class="product-img position-relative overflow-hidden">
+                                <img class="img-fluid w-100" src="../static/img/diamond.png" alt="">
+                                <div class="product-action">
+                                    <a class="btn btn-outline-dark btn-square" href="/cart" onclick="addToCart('257dm', '257 Diamond', 69000)">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="text-center py-4">
+                                <a class="h6 text-decoration-none text-truncate" href="">257 Diamond</a>
+                                <div class="d-flex align-items-center justify-content-center mt-2">
+                                    <h5>IDR 69.000</h5>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-center mb-1">
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                        <div class="product-item bg-light mb-4">
+                            <div class="product-img position-relative overflow-hidden">
+                                <img class="img-fluid w-100" src="../static/img/diamond.png" alt="">
+                                <div class="product-action">
+                                    <a class="btn btn-outline-dark btn-square" href="/cart" onclick="addToCart('345dm', '345 Diamond', 92000)">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="text-center py-4">
+                                <a class="h6 text-decoration-none text-truncate" href="">345 Diamond</a>
+                                <div class="d-flex align-items-center justify-content-center mt-2">
+                                    <h5>IDR 92.000</h5>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-center mb-1">
+                                    <small class="fa fa-star text-primary mr-1"></small>
+
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                        <div class="product-item bg-light mb-4">
+                            <div class="product-img position-relative overflow-hidden">
+                                <img class="img-fluid w-100" src="../static/img/diamond.png" alt="">
+                                <div class="product-action">
+                                    <a class="btn btn-outline-dark btn-square" href="/cart" onclick="addToCart('568dm', '568 Diamond', 147000)">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="text-center py-4">
+                                <a class="h6 text-decoration-none text-truncate" href="">568 Diamond</a>
+                                <div class="d-flex align-items-center justify-content-center mt-2">
+                                    <h5>IDR 147.000</h5>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-center mb-1">
+                                    <small class="fa fa-star text-primary mr-1"></small>
+
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                        <div class="product-item bg-light mb-4">
+                            <div class="product-img position-relative overflow-hidden">
+                                <img class="img-fluid w-100" src="../static/img/diamond.png" alt="">
+                                <div class="product-action">
+                                    <a class="btn btn-outline-dark btn-square" href="/cart" onclick="addToCart('965dm', '965 Diamond', 250000)">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </a>
+                                </div>
+
+                            </div>
+                            <div class="text-center py-4">
+                                <a class="h6 text-decoration-none text-truncate" href="">965 Diamond</a>
+                                <div class="d-flex align-items-center justify-content-center mt-2">
+                                    <h5>IDR 250.000</h5>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-center mb-1">
+                                    <small class="fa fa-star text-primary mr-1"></small>
+
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                        <div class="product-item bg-light mb-4">
+                            <div class="product-img position-relative overflow-hidden">
+                                <img class="img-fluid w-100" src="../static/img/diamond.png" alt="">
+                                <div class="product-action">
+                                    <a class="btn btn-outline-dark btn-square" href="/cart" onclick="addToCart('2010dm', '2010 Diamond', 490000)">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </a>
+                                </div>
+
+                            </div>
+                            <div class="text-center py-4">
+                                <a class="h6 text-decoration-none text-truncate" href="">2010 Diamond</a>
+                                <div class="d-flex align-items-center justify-content-center mt-2">
+                                    <h5>IDR 490.000</h5>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-center mb-1">
+                                    <small class="fa fa-star text-primary mr-1"></small>
+
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                        <div class="product-item bg-light mb-4">
+                            <div class="product-img position-relative overflow-hidden">
+                                <img class="img-fluid w-100" src="../static/img/diamond.png" alt="">
+                                <div class="product-action">
+                                    <a class="btn btn-outline-dark btn-square" href="/cart" onclick="addToCart('2578dm', '2578 Diamond', 637000)">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </a>
+                                </div>
+
+                            </div>
+                            <div class="text-center py-4">
+                                <a class="h6 text-decoration-none text-truncate" href="">2578 Diamond</a>
+                                <div class="d-flex align-items-center justify-content-center mt-2">
+                                    <h5>IDR 637.000</h5>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-center mb-1">
+                                    <small class="fa fa-star text-primary mr-1"></small>
+
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                        <div class="product-item bg-light mb-4">
+                            <div class="product-img position-relative overflow-hidden">
+                                <img class="img-fluid w-100" src="../static/img/diamond.png" alt="">
+                                <div class="product-action">
+                                    <a class="btn btn-outline-dark btn-square" href="/cart" onclick="addToCart('3481dm', '3481 Diamond', 870000)">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </a>
+                                </div>
+
+                            </div>
+                            <div class="text-center py-4">
+                                <a class="h6 text-decoration-none text-truncate" href="">3481 Diamond</a>
+                                <div class="d-flex align-items-center justify-content-center mt-2">
+                                    <h5>IDR 870.000</h5>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-center mb-1">
+                                    <small class="fa fa-star text-primary mr-1"></small>
+
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                        <div class="product-item bg-light mb-4">
+                            <div class="product-img position-relative overflow-hidden">
+                                <img class="img-fluid w-100" src="../static/img/diamond.png" alt="">
+                                <div class="product-action">
+                                    <a class="btn btn-outline-dark btn-square" href="#" onclick="addToCart('4404dm', '4404 Diamond', 1000000)">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </a>
+                                </div>
+
+                            </div>
+                            <div class="text-center py-4">
+                                <a class="h6 text-decoration-none text-truncate" href="">4404 Diamond</a>
+                                <div class="d-flex align-items-center justify-content-center mt-2">
+                                    <h5>IDR 1.000.000</h5>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-center mb-1">
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                        <div class="product-item bg-light mb-4">
+                            <div class="product-img position-relative overflow-hidden">
+                                <img class="img-fluid w-100" src="../static/img/diamond.png" alt="">
+                                <div class="product-action">
+                                    <a class="btn btn-outline-dark btn-square" href="#" onclick="addToCart('7195dm', '7195 Diamond', 1800000)">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </a>
+                                </div>
+
+                            </div>
+                            <div class="text-center py-4">
+                                <a class="h6 text-decoration-none text-truncate" href="">7195 Diamond</a>
+                                <div class="d-flex align-items-center justify-content-center mt-2">
+                                    <h5>IDR 1.800.000</h5>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-center mb-1">
+                                    <small class="fa fa-star text-primary mr-1"></small>
+
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                        <div class="product-item bg-light mb-4">
+                            <div class="product-img position-relative overflow-hidden">
+                                <img class="img-fluid w-100" src="../static/img/diamond.png" alt="">
+                                <div class="product-action">
+                                    <a class="btn btn-outline-dark btn-square" href="#" onclick="addToCart('8302dm', '8302 Diamond', 2200000)">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </a>
+                                </div>
+
+                            </div>
+                            <div class="text-center py-4">
+                                <a class="h6 text-decoration-none text-truncate" href="">8302 Diamond</a>
+                                <div class="d-flex align-items-center justify-content-center mt-2">
+                                    <h5>IDR 2.200.000</h5>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-center mb-1">
+                                    <small class="fa fa-star text-primary mr-1"></small>
+
+
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                        <div class="product-item bg-light mb-4">
+                            <div class="product-img position-relative overflow-hidden">
+                                <img class="img-fluid w-100" src="../static/img/diamond.png" alt="">
+                                <div class="product-action">
+                                    <a class="btn btn-outline-dark btn-square" href="#" onclick="addToCart('12000dm', '12000 Diamond', 3000000)">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </a>
+                                </div>
+
+
+                            </div>
+                            <div class="text-center py-4">
+                                <a class="h6 text-decoration-none text-truncate" href="">12000 Diamond</a>
+                                <div class="d-flex align-items-center justify-content-center mt-2">
+                                    <h5>IDR 3.000.000</h5>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-center mb-1">
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                        <div class="product-item bg-light mb-4">
+                            <div class="product-img position-relative overflow-hidden">
+                </div>
+            </div>
+            <!-- Shop Product End -->
+        </div>
+    </div>
+    <!-- Shop End -->
+
+    <!-- Footer Start -->
+<div class="container-fluid bg-blue text-secondary mt-3 pt-4">
+    <div class="row px-xl-5">
+        <!-- Logo dan Info Toko -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="d-flex align-items-center mb-3">
+                <img src="../static/img/logo.png" alt="Logo" class="mr-3" style="width: 80px; height: 80px;">
+                <h3 class="text-secondary text-uppercase">Mercusuar Store</h3>
+            </div>
+            <p class="mb-3">Kami menyediakan berbagai produk berkualitas dengan harga terbaik untuk Anda.</p>
+            <p><i class="fa fa-map-marker-alt text-primary mr-2"></i>123 Street, New York, USA</p>
+            <p><i class="fa fa-envelope text-primary mr-2"></i>info@example.com</p>
+            <p><i class="fa fa-phone-alt text-primary mr-2"></i>+012 345 67890</p>
+        </div>
+        
+        <!-- Quick Links -->
+        <div class="col-lg-2 col-md-3 mb-4">
+            <h5 class="text-secondary text-uppercase">Quick Links</h5>
+            <ul class="list-unstyled">
+                <li><a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Home</a></li>
+                <li><a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Our Shop</a></li>
+                <li><a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a></li>
+                <li><a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a></li>
+                <li><a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Checkout</a></li>
+                <li><a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a></li>
+            </ul>
+        </div>
+        
+        <!-- Newsletter -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <h5 class="text-secondary text-uppercase">Newsletter</h5>
+            <p>Daftar untuk mendapatkan informasi terbaru dan penawaran eksklusif.</p>
+            <form>
+                <div class="input-group">
+                    <input type="email" class="form-control" placeholder="Your Email Address">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary">Sign Up</button>
+                    </div>
+                </div>
+            </form>
+            <h6 class="text-secondary text-uppercase mt-4">Follow Us</h6>
+            <div class="d-flex">
+                <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
+                <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
+                <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a class="btn btn-primary btn-square" href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer Bottom -->
+    <div class="row border-top mx-xl-5 py-3">
+        <div class="col-md-6 text-center text-md-left">
+            <p class="mb-0">&copy; <a class="text-gray" href="#">Domain</a>. All Rights Reserved. Designed by <a class="text-gray" href="https://htmlcodex.com">HTML Codex</a></p>
+        </div>
+        <div class="col-md-6 text-center text-md-right">
+            <img class="img-fluid" src="../static/img/payments.png" alt="Payments">
+        </div>
+    </div>
+</div>
+<!-- Footer End -->
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/lib/easing/easing.min.js"></script>
+    <script src="../static/lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Contact Javascript File -->
+    <script src="../static/mail/jqBootstrapValidation.min.js"></script>
+    <script src="../static/mail/contact.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="../staticjs/main.js"></script>
+</body>
+
+</html>

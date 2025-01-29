@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Mercusuar Store - Save Game Details</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">  
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="../static/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Topbar Start -->
+    <div class="container-fluid">
+        <div class="row bg-secondary py-1 px-xl-5">
+            <div class="col-lg-6 d-none d-lg-block">
+                <div class="d-inline-flex align-items-center h-100">
+                    <a href="">
+                        <img src="../static/img/logo.png"  class="topbar-img">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Details Form -->
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-blue text-white">
+                        <h4 class="mb-0">Game Account Details</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="gameDetailsForm">
+                            <div class="form-group">
+                                <label>Game ID</label>
+                                <input type="text" name="game_id" class="form-control" placeholder="Enter your Game ID" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Server ID</label>
+                                <input type="text" name="server_id" class="form-control" placeholder="Enter your Server ID" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Nickname</label>
+                                <input type="text" name="nickname" class="form-control" placeholder="Enter your in-game nickname" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Select Product</label>
+                                <select name="product_id" class="form-control" required>
+                                    {% for product in products %}
+                                    <option value="{{ product.id }}">{{ product.name }} - IDR {{ product.price }} (Stock: {{ product.stock }})</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Quantity</label>
+                                <input type="number" name="quantity" class="form-control" value="1" min="1" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Details</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-blue text-secondary mt-3 pt-4">
+        <div class="row px-xl-5">
+            <!-- Logo dan Info Toko -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="d-flex align-items-center mb-3">
+                    <img src="../static/img/logo.png" alt="Logo" class="mr-3" style="width: 80px; height: 80px;">
+                    <h3 class="text-secondary text-uppercase">Mercusuar Store</h3>
+                </div>
+                <p class="mb-3">Kami menyediakan berbagai produk berkualitas dengan harga terbaik untuk Anda.</p>
+                <p><i class="fa fa-map-marker-alt text-primary mr-2"></i>123 Street, New York, USA</p>
+                <p><i class="fa fa-envelope text-primary mr-2"></i>info@example.com</p>
+                <p><i class="fa fa-phone-alt text-primary mr-2"></i>+012 345 67890</p>
+            </div>
+            
+            <!-- Quick Links -->
+            <div class="col-lg-2 col-md-3 mb-4">
+                <h5 class="text-secondary text-uppercase">Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li><a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Home</a></li>
+                    <li><a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Our Shop</a></li>
+                    <li><a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a></li>
+                    <li><a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a></li>
+                    <li><a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Checkout</a></li>
+                    <li><a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Footer Bottom -->
+        <div class="row border-top mx-xl-5 py-3">
+            <div class="col-md-6 text-center text-md-left">
+                <p class="mb-0">&copy; <a class="text-gray" href="#">Domain</a>. All Rights Reserved. Designed by <a class="text-gray" href="https://htmlcodex.com">HTML Codex</a></p>
+            </div>
+            <div class="col-md-6 text-center text-md-right">
+                <img class="img-fluid" src="../static/img/payments.png" alt="Payments">
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+
+    <script>
+        document.getElementById('gameDetailsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch('/save-game-details', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/pembayaran';
+                } else {
+                    alert(data.error || 'Error saving game details');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error saving game details');
+            });
+        });
+    </script>
+</body>
+
+</html>
