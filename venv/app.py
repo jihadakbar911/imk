@@ -32,7 +32,10 @@ def home():
 def admin_page():
     db = get_db()
     orders = db.execute('SELECT * FROM orders').fetchall()
+    print("Data Orders:", orders)  # Debug
     return render_template('orders.html', orders=orders)
+
+
     
 
 @app.route('/cart')
