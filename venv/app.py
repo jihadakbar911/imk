@@ -29,11 +29,10 @@ def home():
 
 @app.route('/admin')
 def admin_page():
-    conn = sqlite3.connect('/app/database.db')  # Sesuaikan lokasi database
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM orders")  # Ambil semua data di tabel orders
-    orders = cursor.fetchall()
-    conn.close()
+    db = get_db()
+    orders = db.execute('SELECT * FROM orders').fetchall()
+    return render_template('orders.html', orders=orders)
+    
 
 @app.route('/cart')
 def cart():
