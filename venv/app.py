@@ -3,6 +3,7 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, g
 import sqlite3
 import json
+from datetime import datetime
 
 logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
@@ -53,9 +54,12 @@ def checkout():
         jumlah_produk = sum(item['quantity'] for item in cart)
         total_harga = sum(float(item['price']) * item['quantity'] for item in cart) + 1000  # Adding admin fee
         
+        # Ambil waktu checkout saat ini
+        waktu_checkout = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        
         db = get_db()
-        db.execute('INSERT INTO orders (user_id, server_id, nickname, email, whatsapp, produk, jumlah_produk, total_harga) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-                   (user_id, server_id, nickname, email, whatsapp, produk, jumlah_produk, total_harga))
+        db.execute('INSERT INTO orders (user_id, server_id, nickname, email, whatsapp, produk, jumlah_produk, total_harga, waktu_checkout) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                   (user_id, server_id, nickname, email, whatsapp, produk, jumlah_produk, total_harga, waktu_checkout))
         db.commit()
 
         return redirect(url_for('paymentsuccess'))

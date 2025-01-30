@@ -20,7 +20,8 @@ def init_db():
                   whatsapp TEXT NOT NULL,
                   produk TEXT NOT NULL,
                   jumlah_produk INTEGER NOT NULL,
-                  total_harga REAL NOT NULL)''')
+                  total_harga REAL NOT NULL,
+                  waktu_checkout DATETIME DEFAULT CURRENT_TIMESTAMP)''')
 
     # Contoh data awal untuk tabel products
     c.execute("INSERT OR IGNORE INTO products (name, price) VALUES ('Product 1', 19.99)")
@@ -28,6 +29,8 @@ def init_db():
 
     conn.commit()
     conn.close()
+    
+    
 
 if __name__ == "__main__":
     init_db()
