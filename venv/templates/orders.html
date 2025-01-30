@@ -4,51 +4,125 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Orders</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background-color: #f8f9fa;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: #3498db;
+        }
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             margin-top: 20px;
+            background: white;
         }
         th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            padding: 15px;
             text-align: left;
+            border-bottom: 1px solid #eee;
         }
         th {
-            background-color: #f2f2f2;
+            background-color: #3498db;
+            color: white;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+        tr:hover {
+            background-color: #f5f6fa;
+            transition: all 0.3s ease;
+        }
+        td {
+            color: #2c3e50;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+            th, td {
+                padding: 10px;
+            }
         }
     </style>
 </head>
 <body>
-    <h2>Data Checkout</h2>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>User ID</th>
-            <th>Server ID</th>
-            <th>Nickname</th>
-            <th>Email</th>
-            <th>WhatsApp</th>
-            <th>Produk</th>
-            <th>Jumlah Produk</th>
-            <th>Total Harga</th>
-            <th>Waktu Checkout</th>
-        </tr>
-        {% for order in orders %}
-        <tr>
-            <td>{{ order[0] }}</td>
-            <td>{{ order[1] }}</td>
-            <td>{{ order[2] }}</td>
-            <td>{{ order[3] }}</td>
-            <td>{{ order[4] }}</td>
-            <td>{{ order[5] }}</td>
-            <td>{{ order[6] }}</td>
-            <td>{{ order[7] }}</td>
-            <td>{{ order[8] }}</td>
-            <td>{{ order[9] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+    <div class="container">
+        <h2>Data Checkout</h2>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>User ID</th>
+                <th>Server ID</th>
+                <th>Nickname</th>
+                <th>Email</th>
+                <th>WhatsApp</th>
+                <th>Produk</th>
+                <th>Jumlah Produk</th>
+                <th>Total Harga</th>
+                <th>Waktu Checkout</th>
+            </tr>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order[0] }}</td>
+                <td>{{ order[1] }}</td>
+                <td>{{ order[2] }}</td>
+                <td>{{ order[3] }}</td>
+                <td>{{ order[4] }}</td>
+                <td>{{ order[5] }}</td>
+                <td>{{ order[6] }}</td>
+                <td>{{ order[7] }}</td>
+                <td>{{ order[8] }}</td>
+                <td>{{ order[9] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
 </body>
 </html>
